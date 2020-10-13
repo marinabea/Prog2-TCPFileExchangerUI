@@ -8,7 +8,7 @@ public class TCPServer {
 
     public static void main(String[] args) {
 
-        int port = 3333;
+        int port = 3100;
         try {
             ServerSocket server = new ServerSocket(port);
             System.out.println("Server gestartet");
