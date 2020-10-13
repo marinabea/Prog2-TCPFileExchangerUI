@@ -11,6 +11,7 @@ public class TCPServer {
         int port = 3100;
 
         try {
+            //neuen Serversocket erstellen
             ServerSocket server = new ServerSocket(port);
             System.out.println("Server gestartet");
 
@@ -27,13 +28,13 @@ public class TCPServer {
                 System.out.println("Empfangen von Client: " + empfangen);
             }
 
-            //an den Client schicken:
+            //DANN an den Client schicken:
             OutputStream os = client.getOutputStream();
             PrintWriter writer = new PrintWriter(os);
             os.write("hallo Client".getBytes());
 
 
-            //Pause
+            //Pause 5sek
             Thread.sleep(5000);
 
             //writer und reader schließen
