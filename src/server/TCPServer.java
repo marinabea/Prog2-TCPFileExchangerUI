@@ -40,7 +40,7 @@ public class TCPServer {
             //writer und reader schließen
             writer.close();
             reader.close();
-
+            System.out.println("Übertragung beendet");
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
