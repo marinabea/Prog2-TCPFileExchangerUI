@@ -1,3 +1,4 @@
+
 package server;
 
 import java.io.*;
@@ -6,10 +7,36 @@ import java.net.Socket;
 
 public class TCPServer {
 
-    public static void main(String[] args) {
+    private final int port;
+    public static final int PORTNR = 3111;
 
-        int port = 3100;
+    public static void main(String[] args) throws IOException, InterruptedException {
 
+        TCPServer tcpServer = new TCPServer(PORTNR);
+
+        tcpServer.doSomething();
+    }
+
+    private void doSomething() throws IOException, InterruptedException {
+        ServerSocket srvsocket = new ServerSocket(this.port);
+        System.out.println("Server erstellt");
+        Socket socket = srvsocket.accept();    //Server akzeptiert Clients, die auf den Port zugreifen wollen. Rückgabe eines Sockets = Verbindung zwischen Server und Client
+        System.out.println("Client akzeptiert");
+        socket.getInputStream().read();     //inputstream aus dem socket lesen
+        System.out.println("Input gelesen");
+        OutputStream os = socket.getOutputStream(); //aus dem Socket gelesener Outputstream in Objekt os zwischenspeichern
+        os.write("Hallo lieber Client".getBytes()); //in den OS schreibt der Server
+        System.out.println("Nachricht geschrieben");
+        Thread.sleep(5000);
+        os.close();
+        System.out.println("Serverseitige Übertragung beendet");
+    }
+
+    TCPServer(int port){
+        this.port = port;
+    }
+}
+    /*
         try {
             //neuen Serversocket erstellen
             ServerSocket server = new ServerSocket(port);
@@ -47,4 +74,8 @@ public class TCPServer {
         }
     }
 
+
 }
+
+
+     */
