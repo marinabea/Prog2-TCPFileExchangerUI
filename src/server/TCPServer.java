@@ -14,12 +14,12 @@ public class TCPServer {
 
         TCPServer tcpServer = new TCPServer(PORTNR);
 
-        tcpServer.doSomething();
+        tcpServer.connect();
     }
 
-    private void doSomething() throws IOException, InterruptedException {
+    private void connect() throws IOException, InterruptedException {
         ServerSocket srvsocket = new ServerSocket(this.port);
-        System.out.println("Server erstellt");
+        System.out.println("Server erstellt - Verbindung jetzt möglich");
         Socket socket = srvsocket.accept();    //Server akzeptiert Clients, die auf den Port zugreifen wollen. Rückgabe eines Sockets = Verbindung zwischen Server und Client
         System.out.println("Client akzeptiert");
         socket.getInputStream().read();     //inputstream aus dem socket lesen

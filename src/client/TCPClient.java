@@ -10,7 +10,7 @@ public class TCPClient {
     public static String hostname;
     public static int portnr;
     private final static String HOST = "localhost";
-    private final static int PORT = 3100;
+    private final static int PORT = 3111;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         TCPClient Client = new TCPClient(HOST, PORT);
