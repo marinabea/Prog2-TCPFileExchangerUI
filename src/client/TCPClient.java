@@ -1,8 +1,6 @@
 package client;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class TCPClient {
@@ -13,9 +11,60 @@ public class TCPClient {
     private final static int PORT = 3111;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        TCPClient Client = new TCPClient(HOST, PORT);
-        Client.connectToServer();
+       // dieses Programm soll als Parameter den host und den port entgegennehmen, die verbunden werden sollen
+       /* if (args.length < 2 ) {
+            System.out.println("Missing parameters. Required: hostname portnumber");
+        } */
+        String hostnamepm = args[0];
+        String portString = args[1];
+        int portno = Integer.parseInt(portString);
+        String fileName = null;
 
+        // wenn ein Argument mehr übergeben wird, handelt es sich dabei um den Dateinamen
+        if (args.length > 2 ) {
+            fileName = args[2];
+        }
+
+        TCPClient Client = new TCPClient(hostnamepm, portno);
+
+        if (fileName != null) {
+            Client.copyFile(fileName);
+        } else {
+            // Client.connectToServer();
+            long timeStamp = System.currentTimeMillis();
+            float value = (float) 42.0;
+            String sensorName = "Sensor A";
+            Client.sendSensorData(timeStamp, value, sensorName);
+         }
+    }
+
+    private void sendSensorData(long timeStamp, float value, String sensorName) throws IOException {
+        Socket sensorSocket = new Socket(this.hostname, this.portnr);
+        OutputStream os = sensorSocket.getOutputStream();
+
+        //DataOutputStream nutzen:
+        DataOutputStream daos = new DataOutputStream(os);
+        // Daten über DataOutputStream senden:
+        daos.writeLong(timeStamp);
+        daos.writeFloat(value);
+        daos.writeUTF(sensorName);
+
+        daos.close();
+    }
+
+    private void copyFile(String fileName) throws IOException {
+        Socket copysocket = new Socket(this.hostname, this.portnr);
+        FileInputStream fis = new FileInputStream(fileName);
+        OutputStream os = copysocket.getOutputStream();
+
+        int read = 0;
+        do {
+            read = fis.read();
+            if (read != -1) {
+                os.write(read);
+            }
+        } while (read != 1);
+        os.close();
     }
 
     TCPClient(String hostname, int portnr) throws IOException {
@@ -33,7 +82,7 @@ public class TCPClient {
         System.out.println("Client hat Nachricht verschickt");
         InputStream is = socket.getInputStream();
 
-        byte[] buffer = new byte[10000];    // Buffer-Array, um zu sendende Nachricht zu übertragen
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();    // Buffer-Array, um zu sendende Nachricht zu übertragen
         int i = 0;  // Zähler, um alle zu sendenden Daten in den Buffer zu schreiben
 
         is.read(); //wenn -1 zurückgegeben wird, kann Server auch nichts mehr lesen
@@ -44,8 +93,7 @@ public class TCPClient {
         do {
             read = is.read();   //read hat den selben Wert wie is.read(), d.h. so viele Bytes wie es noch zu lesen gibt
             if(read != -1) {    //wenn read nicht -1 ist, also noch gelesen werden kann ...
-                byte readByte = (byte) read;    // ( durch parsen unnötige symbolische Byte abschneiden )
-                buffer[i++] = readByte;   // ... gelesene Bytes in den Buffer schreiben
+                baos.write(read);  // ... gelesene Bytes in den Buffer schreiben
             }
 
         } while (read != -1);
@@ -54,13 +102,11 @@ public class TCPClient {
         // wie viele? steht in i
 
         /*-----------------------------------------------------------*/
-        //als String nur die tatsächlich empfangenen Bytes ausgeben, nicht die volle Länge des angelegen Buffers
-        byte[] receivedBytes = new byte[i];
-        for (int j = 0; j < 1; j++) {
-            receivedBytes[j] = buffer[j];
-        }
-        String received = new String(buffer);
-        System.out.println("received: " + received);
+        //als String nur die tatsächlich empfangenen Bytes ausgeben, nicht die volle Länge des angelegen Buffer
+
+
+        String received = new String(baos.toByteArray());
+        System.out.println("Server hat bekommen: " + received);
         /*-----------------------------------------------------------*/
 
         Thread.sleep(500);
