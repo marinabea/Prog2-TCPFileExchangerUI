@@ -7,8 +7,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class TCPConnector implements Client, Connection, Server {
-
-
     private Socket socket;
 
     @Override
