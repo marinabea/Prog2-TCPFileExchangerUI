@@ -1,5 +1,5 @@
 
-package server;
+package TCP;
 
 import java.io.*;
 import java.net.ServerSocket;
