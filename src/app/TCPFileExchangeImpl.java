@@ -26,10 +26,15 @@ public class TCPFileExchangeImpl implements TCPFileExchange {
 
     @Override
     public void receiveFile(String filename, int port) throws IOException {
+        //MARINA: create connection and listens
         Server server = new TCPConnector();
         Connection connection = server.acceptConnection(port);
+        // server.acceptConnection blockiert denn Code bis sich etwas mit dem Port verbindet.
+        // Die Zeile unten wird erst ausgefuehrt wenn es also ne Verbindung gab.
+        System.out.println("Just received a connection!");
 
         FileReceiver fileReceiver = new FileExchanger();
         fileReceiver.receiveFile(filename, connection.getInputStream()); //siehe oben
     }
+
 }

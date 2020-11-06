@@ -19,7 +19,7 @@ public class TCPConnector implements Client, Connection, Server {
     @Override
     public Connection acceptConnection(int port) throws IOException {
         ServerSocket srvsocket = new ServerSocket(port);
-        System.out.println("Server erstellt - Verbindung jetzt möglich");
+        System.out.println("Server erstellt - Verbindung jetzt moeglich");
         this.socket = srvsocket.accept();
         return this;
     }

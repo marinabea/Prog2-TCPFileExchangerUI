@@ -29,6 +29,5 @@ public class TCPSensorDataExchangerImpl implements TCPSensorDataExchanger {
 
         SensorDataReceiver sensorDataReceiver = new SensorDataExchanger();
         sensorDataReceiver.receiveSensorData(connection.getInputStream());
-
     }
 }
